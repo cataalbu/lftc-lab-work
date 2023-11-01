@@ -60,7 +60,7 @@ public class Scanner {
     }
 
     private void tokenize(String line) throws Exception {
-        //               "string"  == <= >=    any of these          for signed numbers   alphanumeric  any character  any non-whitespace
+        //               "string"  == <= >=    any of these          for signed numbers   alphanumeric  any character  any whitespace
         String regex = "\"[^\"]*\"|<>|==|<=|>=|[-+*/=<>,:(){}\"]|(?<=[=(])\\s*[-+]?\\d+|\\b[A-Za-z0-9]+\\b|.|\\S";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(line);
@@ -86,7 +86,7 @@ public class Scanner {
                 if(pos[1] == -1) {
                     pos = st.add(lineToken);
                 }
-                pif.add(new Pair<>("constant", new Pair<>(pos[0], pos[1])));
+                pif.add(new Pair<>("const", new Pair<>(pos[0], pos[1])));
                 continue;
             }
 
@@ -95,7 +95,7 @@ public class Scanner {
                 if(pos[1] == -1) {
                     pos = st.add(lineToken);
                 }
-                pif.add(new Pair<>("constant", new Pair<>(pos[0], pos[1])));
+                pif.add(new Pair<>("const", new Pair<>(pos[0], pos[1])));
                 continue;
             }
 
@@ -104,7 +104,7 @@ public class Scanner {
                 if(pos[1] == -1) {
                     pos = st.add(lineToken);
                 }
-                pif.add(new Pair<>("identifier", new Pair<>(pos[0], pos[1])));
+                pif.add(new Pair<>("id", new Pair<>(pos[0], pos[1])));
                 continue;
             }
             System.out.println(lineToken);
