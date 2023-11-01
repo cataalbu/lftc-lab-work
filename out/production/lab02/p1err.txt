@@ -1,5 +1,5 @@
 program {
-    integer 1a;
+    integer 2abc;
     integer #b;
     read(a);
     read(b);
@@ -14,3 +14,5 @@ program {
     }
     print(a)
 }
+
+

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class Scanner {
 
-    private final ArrayList<String> tokens;
+    private final ArrayList<String> predefinedTokens;
     private ArrayList<Pair<String, Pair<Integer, Integer>>> pif;
     private String program;
     private int currentLine = 1;
@@ -19,11 +19,11 @@ public class Scanner {
     private SymbolTable st;
 
     public Scanner() {
-        tokens = new ArrayList<>();
+        predefinedTokens = new ArrayList<>();
         st = new SymbolTable();
         pif = new ArrayList<>();
         try {
-            getTokens();
+            getPredefinedTokens();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,39 +33,39 @@ public class Scanner {
         this.program = program;
     }
 
-    private void getTokens() throws IOException {
+    private void getPredefinedTokens() throws IOException {
         File tokenFile = new File("src/token.in");
         BufferedReader buffReader = Files.newBufferedReader(tokenFile.toPath());
         String line;
         while((line = buffReader.readLine())!= null) {
             String[] words = line.split(" ");
-                tokens.add(words[0]);
+            predefinedTokens.add(words[0]);
         }
     }
 
-    private boolean isToken(String token) {
-        return tokens.contains(token);
+    private boolean isPredefinedToken(String token) {
+        return predefinedTokens.contains(token);
     }
 
     private boolean isIntegerConstant(String token) {
-            return token.matches("^[+-]?[0-9]+$");
+            return token.matches("^0|[+-]?[1-9][0-9]*$");
     }
 
     private boolean isStringConstant(String token) {
-        return token.matches("^\"[^\"]*\"$");
+        return token.matches("^\"[A-Za-z0-9]*\"$");
     }
 
     private boolean isIdentifier(String token) {
-        return token.matches("^[A-Za-z_][A-Za-z0-9_]*$");
+        return token.matches("^[A-Za-z][A-Za-z0-9]*$");
     }
 
     private void tokenize(String line) throws Exception {
         //               "string"  == <= >=    any of these          for signed numbers   alphanumeric  any character  any non-whitespace
-        String regex = "\"[^\"]*\"|==|<=|>=|[-+*/=<>,:(){}\"]|(?<=[=(])\\s*[-+]?\\d+|\\b[A-Za-z0-9]+\\b|.|\\S";
+        String regex = "\"[^\"]*\"|<>|==|<=|>=|[-+*/=<>,:(){}\"]|(?<=[=(])\\s*[-+]?\\d+|\\b[A-Za-z0-9]+\\b|.|\\S";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(line);
-
         List<String> lineTokens = new ArrayList<>();
+
         while (matcher.find()) {
             String token = matcher.group();
             token = token.trim();
@@ -73,7 +73,10 @@ public class Scanner {
         }
 
         for(var lineToken: lineTokens) {
-            if(isToken(lineToken)) {
+            if(lineToken.length() == 0) {
+                continue;
+            }
+            if(isPredefinedToken(lineToken)) {
                 pif.add(new Pair<>(lineToken, new Pair<>(-1, -1)));
                 continue;
             }
@@ -83,7 +86,7 @@ public class Scanner {
                 if(pos[1] == -1) {
                     pos = st.add(lineToken);
                 }
-                pif.add(new Pair<>("integer constant", new Pair<>(pos[0], pos[1])));
+                pif.add(new Pair<>("constant", new Pair<>(pos[0], pos[1])));
                 continue;
             }
 
@@ -92,7 +95,7 @@ public class Scanner {
                 if(pos[1] == -1) {
                     pos = st.add(lineToken);
                 }
-                pif.add(new Pair<>("string constant", new Pair<>(pos[0], pos[1])));
+                pif.add(new Pair<>("constant", new Pair<>(pos[0], pos[1])));
                 continue;
             }
 
@@ -104,9 +107,7 @@ public class Scanner {
                 pif.add(new Pair<>("identifier", new Pair<>(pos[0], pos[1])));
                 continue;
             }
-            if(lineToken.length() == 0) {
-                continue;
-            }
+            System.out.println(lineToken);
             throw new Exception("Lexical error at line " + currentLine);
         }
     }
