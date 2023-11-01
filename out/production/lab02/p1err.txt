@@ -1,0 +1,16 @@
+program {
+    integer 1a;
+    integer #b;
+    read(a);
+    read(b);
+
+    while a <> b {
+        if a > b {
+            a = a - b
+        }
+        else {
+            a = b - a
+        }
+    }
+    print(a)
+}

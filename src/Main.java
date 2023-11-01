@@ -5,8 +5,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Path file = Path.of("src/p1.txt");
-        String program = Files.readString(file);
-        System.out.println(program);
+        Scanner scanner = new Scanner();
+        scanner.scan("src/p2.txt");
     }
 }

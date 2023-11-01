@@ -33,6 +33,11 @@ public class SymbolTable {
         return new int[]{hashed, index};
     }
 
+    public boolean contains(String key) {
+        int hashed = hash(key);
+        return table.get(hashed).contains(key);
+    }
+
     @Override
     public String toString() {
         StringBuilder st = new StringBuilder();

@@ -8,7 +8,7 @@ public class Pair<K, V> {
         return new Pair<>(key, value);
     }
 
-    private Pair(K key, V value) {
+    Pair(K key, V value) {
         this.key = key;
         this.value = value;
     }
@@ -23,10 +23,10 @@ public class Pair<K, V> {
 
    @Override
    public String toString() {
-       return "Pair{" +
-               "key=" + key +
-               ", value=" + value +
-               '}';
+       return "<" +
+              key +
+               ", " + value +
+               '>';
    }
 
     @Override

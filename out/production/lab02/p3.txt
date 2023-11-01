@@ -1,0 +1,11 @@
+program {
+    integer n, integer x, integer sum;
+    sum = 0;
+    read(n);
+    while n > 0 {
+        read(x);
+        sum = sum + x;
+        n = n - 1;
+    }
+    print(n);
+}
